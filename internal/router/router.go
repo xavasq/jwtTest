@@ -29,6 +29,6 @@ func RouterSetup(r *gin.Engine, db *pgxpool.Pool) {
 	private := api.Group("/private")
 	private.Use(middlewares.AuthMiddleware())
 	{
-		private.GET("/profile", userHandler.GetUserByID)
+		private.GET("/profile", userHandler.GetProfile)
 	}
 }

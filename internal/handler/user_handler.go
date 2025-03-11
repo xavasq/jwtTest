@@ -4,8 +4,9 @@ import (
 	"ECCO2K/internal/models"
 	"ECCO2K/internal/service"
 	"context"
-	"github.com/gin-gonic/gin"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserHandler struct {
@@ -88,4 +89,27 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{"token": token})
+}
+
+
+func (h *UserHandler) GetProfile(c *gin.Context) {
+    userID, exists := c.Get("userID")
+    if !exists {
+        c.JSON(401, gin.H{"error": "пользователь не аутентифицирован"})
+        return
+    }
+
+    id, ok := userID.(uint)
+    if !ok {
+        c.JSON(500, gin.H{"error": "ошибка сервера"})
+        return
+    }
+
+    user, err := h.userService.GetUserByID(context.Background(), id)
+    if err != nil {
+        c.JSON(404, gin.H{"error": "пользователь не найден"})
+        return
+    }
+
+    c.JSON(200, gin.H{"user": user})
 }

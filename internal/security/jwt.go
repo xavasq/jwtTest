@@ -32,11 +32,13 @@ func ValidateToken(tokenString string) (*Claims, error) {
 	cfg := config.LoadEnv()
 	secret := []byte(cfg.JWT_SECRET)
 
-	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+	claims := &Claims{}
+
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return secret, nil
 	})
 	if err != nil {
-		return nil, err
+		return nil, err							
 	}
 
 	claims, ok := token.Claims.(*Claims)

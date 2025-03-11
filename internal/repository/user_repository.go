@@ -34,7 +34,7 @@ func (r *UserRepository) GetUserByID(ctx context.Context, id uint) (*models.User
 }
 
 func (r *UserRepository) GetUserByName(ctx context.Context, name string) (*models.User, error) {
-	query := "SELECT id, name, password FROM users WHERE id = $1"
+	query := "SELECT id, name, password FROM users WHERE name = $1"
 
 	var user models.User
 	if err := r.db.QueryRow(ctx, query, name).Scan(&user.ID, &user.Name, &user.Password); err != nil {
